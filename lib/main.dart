@@ -47,12 +47,14 @@ class _HomePageState extends State<HomePage> {
       widget.items.add(Item(title: novointem.text, done: false),
       );
       novointem.text = "";
+      save();
     });
   }
 
   void removeItem(int index){
     setState(() {
       widget.items.removeAt(index);
+      save();
     });
   }
 
@@ -68,6 +70,11 @@ class _HomePageState extends State<HomePage> {
       });
     }
 
+  }
+  
+  save() async{
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setString('data', jsonEncode(widget.items));
   }
 
 _HomePageState() {
@@ -109,6 +116,7 @@ _HomePageState() {
               onChanged: (value){
                 setState(() {
                   item.done = value;
+                  save();
                 });
             },
           ),
